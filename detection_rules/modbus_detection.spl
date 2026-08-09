@@ -1,0 +1,20 @@
+###############################################
+# Splunk Detection – Malicious Modbus Writes
+# Attacking ICS Plant #2
+###############################################
+
+# Detect unauthorized Modbus write operations (FC05, FC06, FC16)
+index=ics OR index=network
+sourcetype=modbus OR protocol=modbus
+(FunctionCode=5 OR FunctionCode=6 OR FunctionCode=16)
+| eval WriteType=case(
+    FunctionCode=5, "Write Single Coil",
+    FunctionCode=6, "Write Single Register",
+    FunctionCode=16, "Write Multiple Registers",
+    true(), "Other"
+  )
+| stats count BY src_ip, dest_ip, FunctionCode, WriteType, RegisterAddress, RegisterValue
+| where src_ip!="192.168.100.0/24"
+| eval severity="high"
+| eval alert="Unauthorized Modbus Write Operation Detected"
+| table _time, alert, severity, src_ip, dest_ip, WriteType, RegisterAddress, RegisterValue, count

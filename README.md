@@ -30,3 +30,13 @@ ICS/OT attacks are increasingly common, and SOC analysts must understand how ins
 
 This repository contains only my own notes, analysis, and original work.  
 No proprietary TryHackMe content, answers, or walkthroughs are included.
+
+<!-- Project Badges -->
+<p align="center">
+  <img src="https://img.shields.io/badge/ICS%20Security-Modbus%20Exploitation-blue?style=for-the-badge">
+  <img src="https://img.shields.io/badge/PLC%20Analysis-Coils%20%26%20Registers-green?style=for-the-badge">
+  <img src="https://img.shields.io/badge/SOC%20Ready-Detection%20Rules-orange?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Threat%20Model-STRIDE-red?style=for-the-badge">
+  <img src="https://img.shields.io/badge/Blue%20Team-Hardening%20Guide-purple?style=for-the-badge">
+  <img src="https://img.shields.io/badge/TryHackMe-ICS%20Plant%20%232-black?style=for-the-badge&logo=tryhackme">
+</p>

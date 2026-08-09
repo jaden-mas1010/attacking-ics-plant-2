@@ -101,3 +101,88 @@ Critical registers:
 
 ### 4.3 Packet Captures
 Stored in:
+/evidence/packet-captures/
+
+Code
+
+### 4.4 Scripts
+Stored in:
+/scripts/
+
+Code
+
+---
+
+# 5. Detection Analysis
+
+### Indicators of Compromise:
+- Unauthorized Modbus write operations  
+- Function codes 5, 6, 16  
+- High-frequency polling  
+- Writes from non-ICS network segments  
+- Register values outside baseline  
+- Coil toggles during non-operational hours  
+
+### Detection Rules:
+- Suricata IDS rules  
+- Sigma SIEM rules  
+- Splunk `.spl` correlation search  
+
+Stored in:
+/detection_rules/
+
+Code
+
+---
+
+# 6. Root Cause Analysis
+
+### Primary Causes:
+1. **Weak Network Segmentation**  
+   IT network could reach OT network directly.
+
+2. **Insecure Protocol (Modbus)**  
+   No authentication → attacker can write to PLC memory.
+
+3. **Lack of Monitoring**  
+   No IDS/IPS or anomaly detection on ICS network.
+
+4. **Predictable PLC Memory Layout**  
+   Standard Modbus mapping makes enumeration trivial.
+
+---
+
+# 7. Mitigation Recommendations
+
+### 7.1 Immediate Actions
+- Block unauthorized IPs from accessing port 502  
+- Isolate PLC from corporate network  
+- Reset manipulated coils and registers  
+- Validate setpoints and safety thresholds  
+
+### 7.2 Medium-Term Actions
+- Deploy ICS-aware IDS (Suricata, Zeek, Nozomi, Claroty)  
+- Implement write-operation whitelisting  
+- Enforce strict network segmentation  
+- Monitor Modbus function codes  
+
+### 7.3 Long-Term Actions
+- Migrate to secure industrial protocols  
+- Implement role-based access control  
+- Deploy anomaly detection for process values  
+- Conduct regular ICS penetration tests  
+
+---
+
+# 8. Conclusion
+
+ICS Plant #2 demonstrates how insecure industrial protocols and weak segmentation allow attackers to manipulate physical processes with minimal effort.  
+By enumerating coils and registers and issuing unauthorized write commands, the attacker gained full control over pumps, valves, setpoints, and safety thresholds.
+
+This case study highlights the importance of:
+- Monitoring OT networks  
+- Enforcing segmentation  
+- Detecting unauthorized Modbus writes  
+- Understanding PLC memory structures  
+
+The repository provides a complete attacker chain, detection logic, scripts, and documentation to support SOC analysts, engineers, and red teamers.

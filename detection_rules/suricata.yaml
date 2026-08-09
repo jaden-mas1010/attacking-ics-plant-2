@@ -1,0 +1,54 @@
+# Suricata Rules – ICS Modbus Exploitation
+
+# 1. Detect Modbus Write Single Coil (FC05)
+alert tcp any any -> any 502 (
+    msg:"ICS: Unauthorized Modbus Write Single Coil (FC05)";
+    flow:to_server;
+    content:"|00 00|"; offset:2; depth:2;
+    content:"|05|"; offset:7; depth:1;
+    classtype:attempted-admin;
+    sid:500001;
+    rev:1;
+)
+
+# 2. Detect Modbus Write Single Register (FC06)
+alert tcp any any -> any 502 (
+    msg:"ICS: Unauthorized Modbus Write Single Register (FC06)";
+    flow:to_server;
+    content:"|00 00|"; offset:2; depth:2;
+    content:"|06|"; offset:7; depth:1;
+    classtype:attempted-admin;
+    sid:500002;
+    rev:1;
+)
+
+# 3. Detect Modbus Write Multiple Registers (FC16)
+alert tcp any any -> any 502 (
+    msg:"ICS: Unauthorized Modbus Write Multiple Registers (FC16)";
+    flow:to_server;
+    content:"|00 00|"; offset:2; depth:2;
+    content:"|10|"; offset:7; depth:1;
+    classtype:attempted-admin;
+    sid:500003;
+    rev:1;
+)
+
+# 4. Detect Modbus Writes from Non-ICS Network Segments
+alert tcp !192.168.100.0/24 any -> 192.168.100.0/24 502 (
+    msg:"ICS: Modbus Write Attempt from Unauthorized Network";
+    flow:to_server;
+    content:"|00 00|"; offset:2; depth:2;
+    classtype:attempted-admin;
+    sid:500004;
+    rev:1;
+)
+
+# 5. Detect High-Frequency Modbus Polling (Potential Recon)
+alert tcp any any -> any 502 (
+    msg:"ICS: Suspicious High-Frequency Modbus Polling";
+    flow:to_server;
+    threshold:type both, track by_src, count 50, seconds 10;
+    classtype:attempted-recon;
+    sid:500005;
+    rev:1;
+)
